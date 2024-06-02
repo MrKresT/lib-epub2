@@ -6,8 +6,6 @@ $(function () {
   //страница
   let currentSectionIndex = (params && params.get("loc")) ? params.get("loc") : undefined;
 
-
-
   var font_size = 100;
   var themes = [];
   var current_theme;
@@ -23,8 +21,8 @@ $(function () {
     var settings = handler.getCurrentReaderSettings();
     font_size = settings.fontSize;
     current_theme = settings.theme == 'author-theme' ? 'default-theme' : settings.theme;
-    isHorizontalScroll = (settings.scroll == "auto") && (settings.syntheticSpread == "auto");
-    // isHorizontalScroll = false;
+    // isHorizontalScroll = (settings.scroll == "auto") && (settings.syntheticSpread == "auto");
+    isHorizontalScroll = false;
 
     if (isHorizontalScroll) {
       $("#reading-area").addClass("reading-area-margin");
@@ -35,6 +33,9 @@ $(function () {
     setViewFontSize(font_size);
     setViewTheme(current_theme);
     setViewType(isHorizontalScroll ? "h" : "v");
+
+    setVerticalScroll(1000);
+
     TreineticEpubReader.handler().setTheme(current_theme);
     TreineticEpubReader.handler().changeColumnMaxWidth(1200);
   });
@@ -58,7 +59,9 @@ $(function () {
 
   setViewFontSize(font_size);
   setTheams(themes);
-  setViewType("h");
+  setViewType("v");
+
+  setVerticalScroll(1000);
 
   var config = TreineticEpubReader.config();
   config.jsLibRoot = "./assets/workers/";
@@ -98,25 +101,33 @@ $(function () {
     TreineticEpubReader.handler().setTheme(id);
   });
 
-  $(".vertical-view").on("click", function () {
-    setViewType("v");
-    $("#reading-area").removeClass("reading-area-margin");
-    setTimeout(() => {
-      let ext = TreineticEpubReader.handler();
-      ext.setScrollOption("scroll-continuous");
-      ext.setDisplayFormat("single");
-    }, 500);
-  });
-
-  $(".horizontal-view").on("click", function () {
-    setViewType("h");
+  function setHorizontalScroll(timer = 500) {
     setTimeout(() => {
       let ext = TreineticEpubReader.handler();
       ext.setScrollOption("auto");
       ext.setDisplayFormat("auto");
       $("#reading-area").addClass("reading-area-margin");
-    }, 500);
-  });
+    }, timer);
+  }
+
+  function setVerticalScroll(timer = 500) {
+    $("#reading-area").removeClass("reading-area-margin");
+    setTimeout(() => {
+      let ext = TreineticEpubReader.handler();
+      ext.setScrollOption("scroll-continuous");
+      ext.setDisplayFormat("single");
+    }, timer);
+  }
+
+  // $(".vertical-view").on("click", function () {
+  //   setViewType("v");
+  //   setVerticalScroll();
+  // });
+  //
+  // $(".horizontal-view").on("click", function () {
+  //   setViewType("h");
+  //   setHorizontalScroll();
+  // });
 
   $(".prev-button").on("click", function () {
     $(".pre-next-wrapper").removeClass("noPreview");
@@ -170,14 +181,14 @@ $(function () {
 
   function setViewType(type) {
     console.log("view type..... " + type)
-    $(".horizontal-view").removeClass("sc-selected");
+    // $(".horizontal-view").removeClass("sc-selected");
     $(".vertical-view").removeClass("sc-selected");
     if (type == "h") {
-      $(".horizontal-view").addClass("sc-selected")
+      // $(".horizontal-view").addClass("sc-selected")
       $(".page-controls").addClass("page-controls-visible");
     } else if (type == "v") {
       $(".page-controls").removeClass("page-controls-visible");
-      $(".vertical-view").addClass("sc-selected")
+      // $(".vertical-view").addClass("sc-selected")
     }
   }
 
