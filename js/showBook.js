@@ -17,7 +17,7 @@ $(function () {
   });
 
   handler.registerEvent("onEpubLoadSuccess", () => {
-
+console.log('here');
     var settings = handler.getCurrentReaderSettings();
     font_size = settings.fontSize;
     current_theme = settings.theme == 'author-theme' ? 'default-theme' : settings.theme;
@@ -34,8 +34,12 @@ $(function () {
     setViewTheme(current_theme);
     setViewType(isHorizontalScroll ? "h" : "v");
 
+
+    console.log(settings);
+
     setVerticalScroll(1000);
 
+    TreineticEpubReader.handler().setAutoBookmark(true);
     TreineticEpubReader.handler().setTheme(current_theme);
     TreineticEpubReader.handler().changeColumnMaxWidth(1200);
   });
@@ -64,6 +68,8 @@ $(function () {
   setVerticalScroll(1000);
 
   var config = TreineticEpubReader.config();
+  var settings = handler.getCurrentReaderSettings();
+  console.log(settings);
   config.jsLibRoot = "./assets/workers/";
   config.loader = "one"
   TreineticEpubReader.create("#epub-reader-frame");
