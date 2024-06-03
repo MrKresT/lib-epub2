@@ -57818,8 +57818,8 @@ define('readium_js_viewer/TreineticEpubReader',[
     }
 
     function open(epubUrlOrFolder) {
-        var settings = setReaderPreferences();
         ebookURL_filepath = getEpubURLFilePath(epubUrlOrFolder);
+        var settings = setReaderPreferences();
         var openPageRequest = getOpenPageRequest(settings, ebookURL_filepath);
         var urlParams = Helpers.getURLQueryParams();
         var goto = urlParams['goto'];
