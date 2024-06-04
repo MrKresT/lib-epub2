@@ -3,8 +3,8 @@ $(function () {
   let params = URLSearchParams && new URLSearchParams(document.location.search.substring(1));
   //передаем урл какой-то книги
   let url = params && params.get("url") && decodeURIComponent(params.get("url"));
-  //страница
-  let currentSectionIndex = (params && params.get("loc")) ? params.get("loc") : undefined;
+  //открытие локальной книги
+  let book = params && params.get("book") && decodeURIComponent(params.get("book"));
 
   var font_size = 100;
   var themes = [];
@@ -17,7 +17,6 @@ $(function () {
   });
 
   handler.registerEvent("onEpubLoadSuccess", () => {
-console.log('here');
     var settings = handler.getCurrentReaderSettings();
     font_size = settings.fontSize;
     current_theme = settings.theme == 'author-theme' ? 'default-theme' : settings.theme;
@@ -33,9 +32,6 @@ console.log('here');
     setViewFontSize(font_size);
     setViewTheme(current_theme);
     setViewType(isHorizontalScroll ? "h" : "v");
-
-
-    console.log(settings);
 
     setVerticalScroll(1000);
 
@@ -69,12 +65,13 @@ console.log('here');
 
   var config = TreineticEpubReader.config();
   var settings = handler.getCurrentReaderSettings();
-  console.log(settings);
   config.jsLibRoot = "./assets/workers/";
   config.loader = "one"
   TreineticEpubReader.create("#epub-reader-frame");
   if (url) {
     TreineticEpubReader.open(url);
+  }else if (book) {
+    TreineticEpubReader.open('./books/' + book);
   } else {
     TreineticEpubReader.open("./assets/epub/prygody-bravogo-voyaka-shvejka.epub");
   }
